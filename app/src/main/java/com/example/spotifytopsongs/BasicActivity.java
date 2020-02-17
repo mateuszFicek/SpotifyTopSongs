@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.spotifytopsongs.Adapters.ListViewAdapter;
 import com.example.spotifytopsongs.Connectors.SongService;
 import com.example.spotifytopsongs.Models.Song;
 
@@ -24,12 +26,11 @@ public class BasicActivity extends AppCompatActivity {
     private TextView userView;
     private TextView songView;
     private TextView currentSongView;
-    private TextView topSongsView;
+    private ListView topSongsListView;
     private Button addBtn;
     private Song currentSong;
     private SongService songService;
     private ArrayList<Song> recentlyPlayedTracks;
-    private Song song;
     private ArrayList<Song> topSongs;
 
 
@@ -43,7 +44,7 @@ public class BasicActivity extends AppCompatActivity {
         songView = (TextView) findViewById(R.id.song);
         addBtn = (Button) findViewById(R.id.add);
         currentSongView = (TextView) findViewById(R.id.currentSong);
-        topSongsView = (TextView) findViewById(R.id.topSong);
+        topSongsListView = (ListView) findViewById(R.id.topSongsListView);
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
         userView.setText(sharedPreferences.getString("userid", "No User"));
@@ -72,7 +73,6 @@ public class BasicActivity extends AppCompatActivity {
     private void updateRecentSongs() {
         if (recentlyPlayedTracks.size() > 0) {
             songView.setText(recentlyPlayedTracks.get(0).getName());
-            song = recentlyPlayedTracks.get(0);
         }
     }
 
@@ -100,7 +100,9 @@ public class BasicActivity extends AppCompatActivity {
 
     private void updateTopSongs() {
         if(topSongs.size() > 0){
-            topSongsView.setText(topSongs.get(0).getName());
+            ListViewAdapter listViewAdapter = new ListViewAdapter(this,topSongs);
+            topSongsListView.setAdapter(listViewAdapter);
         }
     }
+
 }

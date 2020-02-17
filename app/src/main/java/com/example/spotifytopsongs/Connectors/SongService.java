@@ -96,7 +96,6 @@ public class SongService {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, endpoint, null, response -> {
                     Gson gson = new Gson();
-                    Log.d("JSON", response.toString());
                     JSONObject jsonObject = response.optJSONObject("item");
                     try {
                         String name = jsonObject.getString("name");
@@ -137,10 +136,22 @@ public class SongService {
                     for (int n = 0; n < jsonArray.length(); n++) {
                         try {
                             JSONObject object = jsonArray.getJSONObject(n);
-
+                            String coverURL = object.getJSONObject("album").getJSONArray("images").getJSONObject(1).getString("url");
                             String name = object.getString("name");
                             String id = object.getString("id");
-                            Song song = new Song(id, name);
+                            JSONArray artist = object.getJSONArray("artists");
+                            String artists = new String();
+                            for(int a = 0; a < artist.length(); a++){
+                                JSONObject current = artist.getJSONObject(a);
+                                if (a == 0){
+                                    artists += current.getString("name");
+                                }
+                                else {
+                                    artists += (", ");
+                                    artists += current.getString("name");
+                                }
+                            }
+                            Song song = new Song(id, name,artists, coverURL);
                             topSongs.add(song);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -162,6 +173,7 @@ public class SongService {
             }
         };
         queue.add(jsonObjectRequest);
+        Log.d("SIZE", Integer.toString(topSongs.size()));
         return topSongs;
     }
 }

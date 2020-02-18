@@ -25,7 +25,7 @@ import com.example.spotifytopsongs.Connectors.UserServices;
 /**
  * Start Activity, authenticate Spotify
  */
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends AppCompatActivity{
 
     private SharedPreferences.Editor editor;
     private SharedPreferences msharedPreferences;
@@ -35,7 +35,8 @@ public class SplashActivity extends AppCompatActivity {
     private static final String CLIENT_ID = "b597baec755a46d0934470305a5015de";
     private static final String REDIRECT_URI = "com.example.spotifytopsongs://callback";
     private static final int REQUEST_CODE = 1337;
-    private static final String[] SCOPES = {"user-read-private, user-read-currently-playing, user-top-read", "streaming"};
+    private static final String[] SCOPES = {"user-read-private, user-read-currently-playing, user-top-read, playlist-modify-public, playlist-modify-private", "streaming"};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class SplashActivity extends AppCompatActivity {
             User user = userService.getUser();
             editor = getSharedPreferences("SPOTIFY", 0).edit();
             editor.putString("userid", user.id);
+            Log.d("USERID", user.id);
             // We use commit instead of apply because we need the information stored immediately
             editor.commit();
             startMainActivity();

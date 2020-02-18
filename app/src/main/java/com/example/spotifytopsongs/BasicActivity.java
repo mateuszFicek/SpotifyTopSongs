@@ -3,7 +3,7 @@ package com.example.spotifytopsongs;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.MotionEvent;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.spotifytopsongs.Adapters.ListViewAdapter;
 import com.example.spotifytopsongs.Connectors.SongService;
+import com.example.spotifytopsongs.Models.Playlist;
 import com.example.spotifytopsongs.Models.Song;
 
 import java.util.ArrayList;
@@ -32,7 +33,10 @@ public class BasicActivity extends AppCompatActivity {
     private SongService songService;
     private ArrayList<Song> recentlyPlayedTracks;
     private ArrayList<Song> topSongs;
-
+    private Button createPlaylistButton;
+    private Playlist topPlaylist;
+    private int Counter = 0;
+    private AddSongsOnCallback addSongsOnCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,16 +49,31 @@ public class BasicActivity extends AppCompatActivity {
         addBtn = (Button) findViewById(R.id.add);
         currentSongView = (TextView) findViewById(R.id.currentSong);
         topSongsListView = (ListView) findViewById(R.id.topSongsListView);
+        createPlaylistButton = (Button) findViewById(R.id.createPlaylistButton);
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
+        String wasPlaylistMade = sharedPreferences.getString("wasPlaylistMade", "");
         userView.setText(sharedPreferences.getString("userid", "No User"));
-        addBtn.setOnTouchListener(new View.OnTouchListener() {
+        addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent event) {
+            public void onClick(View v) {
                 Intent intent = getIntent();
                 finish();
                 startActivity(intent);
-                return true;
+            }
+        });
+
+        createPlaylistButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Counter == 0) {
+                    createPlaylist();
+                    Counter++;
+                    Log.d("COUNTER", Integer.toString(Counter));
+                } else {
+                    Counter++;
+                    Log.d("COUNTER", Integer.toString(Counter));
+                }
             }
         });
         getTracks();
@@ -99,10 +118,20 @@ public class BasicActivity extends AppCompatActivity {
     }
 
     private void updateTopSongs() {
-        if(topSongs.size() > 0){
-            ListViewAdapter listViewAdapter = new ListViewAdapter(this,topSongs);
+        if (topSongs.size() > 0) {
+            ListViewAdapter listViewAdapter = new ListViewAdapter(this, topSongs);
             topSongsListView.setAdapter(listViewAdapter);
         }
+    }
+
+    private void createPlaylist() {
+        Log.d("Gdzie?", "Tu jestem");
+        addSongsOnCallback = new AddSongsOnCallback(getApplicationContext(), topSongs);
+
+    }
+
+    private void addSongsTopPlaylist() {
+
     }
 
 }

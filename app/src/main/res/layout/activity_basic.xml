@@ -123,6 +123,12 @@
         tools:layout_editor_absoluteX="175dp"
         tools:layout_editor_absoluteY="16dp" />
 
+    <Button
+        android:id="@+id/createPlaylistButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Stwórz playlistę z poniższymi piosenkami" />
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

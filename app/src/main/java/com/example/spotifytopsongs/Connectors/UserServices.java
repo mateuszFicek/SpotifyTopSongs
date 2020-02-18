@@ -12,14 +12,9 @@ import com.android.volley.toolbox.Volley;
 import com.example.spotifytopsongs.Models.User;
 import com.example.spotifytopsongs.VolleyCallBack;
 import com.google.gson.Gson;
-
 import java.util.HashMap;
 import java.util.Map;
 
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 
 /**
  * User Service that connects with Spotify API and gets all the data needed for further methods.

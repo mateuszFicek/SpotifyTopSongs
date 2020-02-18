@@ -9,7 +9,9 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.spotifytopsongs.Models.Playlist;
 import com.example.spotifytopsongs.Models.Song;
+import com.example.spotifytopsongs.PlaylistCallback;
 import com.example.spotifytopsongs.VolleyCallBack;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
@@ -33,6 +35,9 @@ public class SongService {
     private SharedPreferences sharedPreferences;
     private RequestQueue queue;
     private Song currentSong;
+    private Playlist playlist;
+    private SharedPreferences.Editor editor;
+
 
     public SongService(Context context) {
         sharedPreferences = context.getSharedPreferences("SPOTIFY", 0);
@@ -49,6 +54,10 @@ public class SongService {
 
     public Song getSong() {
         return currentSong;
+    }
+
+    public Playlist getPlaylist() {
+        return playlist;
     }
 
     /**
@@ -88,6 +97,7 @@ public class SongService {
         queue.add(jsonObjectRequest);
         return songs;
     }
+
     /**
      * Getting current song that user is listening to.
      */
@@ -132,7 +142,6 @@ public class SongService {
                 (Request.Method.GET, endpoint, null, response -> {
                     Gson gson = new Gson();
                     JSONArray jsonArray = response.optJSONArray("items");
-                    Log.d("JSONTOP", jsonArray.toString());
                     for (int n = 0; n < jsonArray.length(); n++) {
                         try {
                             JSONObject object = jsonArray.getJSONObject(n);
@@ -141,17 +150,16 @@ public class SongService {
                             String id = object.getString("id");
                             JSONArray artist = object.getJSONArray("artists");
                             String artists = new String();
-                            for(int a = 0; a < artist.length(); a++){
+                            for (int a = 0; a < artist.length(); a++) {
                                 JSONObject current = artist.getJSONObject(a);
-                                if (a == 0){
+                                if (a == 0) {
                                     artists += current.getString("name");
-                                }
-                                else {
+                                } else {
                                     artists += (", ");
                                     artists += current.getString("name");
                                 }
                             }
-                            Song song = new Song(id, name,artists, coverURL);
+                            Song song = new Song(id, name, artists, coverURL);
                             topSongs.add(song);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -173,7 +181,8 @@ public class SongService {
             }
         };
         queue.add(jsonObjectRequest);
-        Log.d("SIZE", Integer.toString(topSongs.size()));
         return topSongs;
     }
+
+
 }

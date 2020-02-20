@@ -91,7 +91,8 @@ public class BasicActivity extends AppCompatActivity {
 
     private void updateRecentSongs() {
         if (recentlyPlayedTracks.size() > 0) {
-            songView.setText(recentlyPlayedTracks.get(0).getName());
+            String recent = recentlyPlayedTracks.get(0).getName() + " - " + recentlyPlayedTracks.get(0).getArtist();
+            songView.setText(recent);
         }
     }
 
@@ -105,7 +106,8 @@ public class BasicActivity extends AppCompatActivity {
 
     private void updateCurrentSong() {
         if (currentSong != null) {
-            currentSongView.setText(currentSong.getName());
+            String currentSongTitle = currentSong.getName() + " - " + currentSong.getArtist();
+            currentSongView.setText(currentSongTitle);
         }
     }
 

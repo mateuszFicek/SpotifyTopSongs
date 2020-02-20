@@ -24,30 +24,8 @@ public class ListViewAdapter extends ArrayAdapter<Song> {
     Context context;
     ArrayList<Song> topSongsList;
 
-//    ListViewAdapter(Context context, Song songs[],String songNames[]){
-//        super(context, R.layout.row, R.id.titleTextView, songNames);
-//        this.context = context;
-//        this.topSongsList = songs;
-//        this.songNames = songNames;
-//    }
-//
-//    public ArrayList<String> getSongNames(ArrayList<Song> songs){
-//        ArrayList names = new ArrayList<String>();
-//        ArrayList urls = new ArrayList<String>();
-//        ArrayList artists = new ArrayList<String>();
-//
-//        String name,artist,url;
-//        for (int i = 0; i < songs.size(); i++){
-//            name = songs.get(i).getName();
-//            url = songs.get(i).getAlbumCoverURL();
-//            names.add(name);
-//            urls.add(url);
-//        }
-//        this.songNames = names;
-//    }
-
-    public ListViewAdapter(Context context, ArrayList<Song> topSongs){
-        super(context,0,topSongs);
+    public ListViewAdapter(Context context, ArrayList<Song> topSongs) {
+        super(context, 0, topSongs);
         topSongsList = topSongs;
     }
 
@@ -55,7 +33,7 @@ public class ListViewAdapter extends ArrayAdapter<Song> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         Song song = getItem(position);
-        if(convertView == null){
+        if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.row, parent, false);
         }
 
@@ -65,6 +43,9 @@ public class ListViewAdapter extends ArrayAdapter<Song> {
 
         artist.setText(song.getArtist());
         title.setText(song.getName());
+
+        artist.setSelected(true);
+        title.setSelected(true);
         Picasso.get().load(song.getAlbumCoverURL()).into(cover);
 
         return convertView;

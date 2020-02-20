@@ -74,7 +74,21 @@ public class SongService {
                         try {
                             JSONObject object = jsonArray.getJSONObject(n);
                             object = object.optJSONObject("track");
-                            Song song = gson.fromJson(object.toString(), Song.class);
+                            String name = object.getString("name");
+                            String id = object.getString("id");
+                            JSONArray artist = object.getJSONArray("artists");
+                            String artists = new String();
+                            for (int a = 0; a < artist.length(); a++) {
+                                JSONObject current = artist.getJSONObject(a);
+                                if (a == 0) {
+                                    artists += current.getString("name");
+                                } else {
+                                    artists += (", ");
+                                    artists += current.getString("name");
+                                }
+                            }
+                            Log.d("ASDASD", artists);
+                            Song song = new Song(id,name,artists);
                             songs.add(song);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -90,6 +104,7 @@ public class SongService {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", "");
                 String auth = "Bearer " + token;
+                headers.put("limit","1");
                 headers.put("Authorization", auth);
                 return headers;
             }
@@ -110,7 +125,18 @@ public class SongService {
                     try {
                         String name = jsonObject.getString("name");
                         String id = jsonObject.getString("id");
-                        Song song = new Song(id, name);
+                        JSONArray artist = jsonObject.getJSONArray("artists");
+                        String artists = new String();
+                        for (int a = 0; a < artist.length(); a++) {
+                            JSONObject current = artist.getJSONObject(a);
+                            if (a == 0) {
+                                artists += current.getString("name");
+                            } else {
+                                artists += (", ");
+                                artists += current.getString("name");
+                            }
+                        }
+                        Song song = new Song(id, name, artists);
                         currentSong = song;
                     } catch (JSONException e) {
                         e.printStackTrace();

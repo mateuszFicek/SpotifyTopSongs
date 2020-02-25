@@ -35,8 +35,6 @@ public class SongService {
     private SharedPreferences sharedPreferences;
     private RequestQueue queue;
     private Song currentSong;
-    private Playlist playlist;
-    private SharedPreferences.Editor editor;
 
 
     public SongService(Context context) {
@@ -56,10 +54,6 @@ public class SongService {
         return currentSong;
     }
 
-    public Playlist getPlaylist() {
-        return playlist;
-    }
-
     /**
      * Getting array of songs that user recently listened to.
      */
@@ -76,6 +70,7 @@ public class SongService {
                             object = object.optJSONObject("track");
                             String name = object.getString("name");
                             String id = object.getString("id");
+                            String spotifyURL = object.getJSONObject("external_urls").getString("spotify");
                             JSONArray artist = object.getJSONArray("artists");
                             String artists = new String();
                             for (int a = 0; a < artist.length(); a++) {
@@ -87,8 +82,7 @@ public class SongService {
                                     artists += current.getString("name");
                                 }
                             }
-                            Log.d("ASDASD", artists);
-                            Song song = new Song(id,name,artists);
+                            Song song = new Song(id, name, artists, spotifyURL);
                             songs.add(song);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -104,7 +98,7 @@ public class SongService {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", "");
                 String auth = "Bearer " + token;
-                headers.put("limit","1");
+                headers.put("limit", "1");
                 headers.put("Authorization", auth);
                 return headers;
             }
@@ -126,6 +120,7 @@ public class SongService {
                         String name = jsonObject.getString("name");
                         String id = jsonObject.getString("id");
                         JSONArray artist = jsonObject.getJSONArray("artists");
+                        String spotifyURL = jsonObject.getJSONObject("external_urls").getString("spotify");
                         String artists = new String();
                         for (int a = 0; a < artist.length(); a++) {
                             JSONObject current = artist.getJSONObject(a);
@@ -136,7 +131,7 @@ public class SongService {
                                 artists += current.getString("name");
                             }
                         }
-                        Song song = new Song(id, name, artists);
+                        Song song = new Song(id, name, artists, spotifyURL);
                         currentSong = song;
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -166,7 +161,6 @@ public class SongService {
         String endpoint = "https://api.spotify.com/v1/me/top/tracks";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, endpoint, null, response -> {
-                    Gson gson = new Gson();
                     JSONArray jsonArray = response.optJSONArray("items");
                     for (int n = 0; n < jsonArray.length(); n++) {
                         try {
@@ -174,6 +168,7 @@ public class SongService {
                             String coverURL = object.getJSONObject("album").getJSONArray("images").getJSONObject(1).getString("url");
                             String name = object.getString("name");
                             String id = object.getString("id");
+                            String spotifyURL = object.getJSONObject("external_urls").getString("spotify");
                             JSONArray artist = object.getJSONArray("artists");
                             String artists = new String();
                             for (int a = 0; a < artist.length(); a++) {
@@ -185,7 +180,7 @@ public class SongService {
                                     artists += current.getString("name");
                                 }
                             }
-                            Song song = new Song(id, name, artists, coverURL);
+                            Song song = new Song(id, name, artists, coverURL, spotifyURL);
                             topSongs.add(song);
                         } catch (JSONException e) {
                             e.printStackTrace();

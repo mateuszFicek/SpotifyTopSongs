@@ -1,54 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
     android:background="@color/colorRowBackground"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="horizontal"
+    android:padding="16dp"
+
     >
 
     <ImageView
+        android:id="@+id/coverImage"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:id="@+id/coverImage"
-        android:src="@mipmap/ic_launcher"
-        />
+        android:src="@mipmap/ic_launcher" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Title"
-        android:textColor="@color/colorFontBright"
-        android:textStyle="bold"
-        android:layout_margin="8dp"
-        android:textSize="20sp"
-        android:id="@+id/titleTextView"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:singleLine="true"
-        android:scrollHorizontally="true"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit ="marquee_forever"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Artist"
-        android:textColor="@color/colorFontAccent"
-        android:textStyle="bold"
-        android:layout_margin="8dp"
-        android:textSize="15sp"
-        android:id="@+id/artistTextView"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:singleLine="true"
-        android:scrollHorizontally="true"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit ="marquee_forever"
-        />
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="Title"
+            android:textColor="@color/colorFontBright"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/artistTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="Artist"
+            android:textColor="@color/colorFontAccent"
+            android:textSize="15sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </LinearLayout>

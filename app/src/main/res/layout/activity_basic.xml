@@ -125,20 +125,60 @@
         app:layout_constraintTop_toBottomOf="@+id/currentList">
 
         <Button
-            android:id="@+id/add"
+            android:id="@+id/refresh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/custom_button_refresh"
             android:text="Refresh"
             android:textColor="@color/colorFontBright"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/addSong"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/addSong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/custom_button_refresh"
+            android:text="Add Song"
+            android:textColor="@color/colorFontBright"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/refresh" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/chosenPlaylist"
+            android:layout_width="140dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="Wybrana playlista: "
+
+            android:textColor="@color/colorFontBright"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Spinner
+            android:id="@+id/playlistSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="2dp">
+
+        </Spinner>
+    </LinearLayout>
 
     <Button
         android:id="@+id/createPlaylistButton"
@@ -147,7 +187,7 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/custom_button"
         android:text="Stwórz playlistę z poniższymi piosenkami"
-        app:layout_constraintBottom_toTopOf="@+id/add"
+        app:layout_constraintBottom_toTopOf="@+id/refresh"
         app:layout_constraintTop_toBottomOf="@id/top" />
 
     <TextView
@@ -158,15 +198,15 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Najczęściej odtwarzane"
+        android:text="Najczęściej odtwarzane (Naciśnij, aby odtworzyć w Spotify)"
         android:textColor="@color/colorFontBright"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/createPlaylistButton" />
 
     <ListView
-            android:id="@+id/topSongsListView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        android:id="@+id/topSongsListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

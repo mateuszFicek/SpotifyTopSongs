@@ -10,25 +10,32 @@ public class Song {
     private String name;
     private String artist;
     private String albumCoverURL;
+    private String spotifyURL;
     public Song(String id, String name) {
         this.name = name;
         this.id = id;
     }
-    public Song(String id, String name, String artist) {
+    public Song(String id, String name, String artist, String spotifyURL) {
         this.name = name;
         this.id = id;
         this.artist = artist;
+        this.spotifyURL = spotifyURL;
     }
 
-    public Song(String id, String name, String artist, String albumCoverURL){
+    public Song(String id, String name, String artist, String albumCoverURL, String spotifyURL){
         this.name = name;
         this.id = id;
         this.albumCoverURL = albumCoverURL;
         this.artist = artist;
+        this.spotifyURL = spotifyURL;
     }
 
     public String getId() {
         return id;
+    }
+
+    public String getSpotifyURL() {
+        return spotifyURL;
     }
 
     public void setId(String id) {

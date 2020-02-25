@@ -1,27 +1,37 @@
 package com.example.spotifytopsongs.Connectors;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.spotifytopsongs.BasicActivity;
 import com.example.spotifytopsongs.Models.Playlist;
 import com.example.spotifytopsongs.Models.Song;
 import com.example.spotifytopsongs.PlaylistCallback;
+import com.example.spotifytopsongs.VolleyCallBack;
+import com.google.gson.JsonArray;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 /**
  * Callback class for creatingPlaylist and when it is successful it passes playlist to AddSongsOnCallback class.
  */
 public class PlaylistService {
-    private ArrayList<Song> songs = new ArrayList<>();
-    private ArrayList<Song> topSongs = new ArrayList<>();
     private SharedPreferences sharedPreferences;
     private RequestQueue queue;
     private Song currentSong;
@@ -29,15 +39,23 @@ public class PlaylistService {
     private SharedPreferences.Editor editor;
     PlaylistCallback playlistCallback;
 
+    public ArrayList<Playlist> getPlay() {
+        return play;
+    }
+
+    private ArrayList<Playlist> play = new ArrayList<>();
+
     public PlaylistService(Context context, PlaylistCallback playlistCallback) {
         sharedPreferences = context.getSharedPreferences("SPOTIFY", 0);
         queue = Volley.newRequestQueue(context);
         this.playlistCallback = playlistCallback;
     }
 
-    public Playlist getPlaylist() {
-        return playlist;
+    public PlaylistService(Context context) {
+        sharedPreferences = context.getSharedPreferences("SPOTIFY", 0);
+        queue = Volley.newRequestQueue(context);
     }
+
 
     public void createPlaylist() {
         String endpoint = "https://api.spotify.com/v1/users/";
@@ -81,4 +99,127 @@ public class PlaylistService {
         };
         queue.add(jsonObjectRequest);
     }
+
+    public ArrayList<Playlist> getUserPlaylists(final VolleyCallBack callBack) {
+        String user = sharedPreferences.getString("userid", "");
+        String endpoint = "https://api.spotify.com/v1/users/" + user + "/playlists";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, endpoint, null, response -> {
+                    JSONArray jsonArray = response.optJSONArray("items");
+                    Log.d("size", Integer.toString(jsonArray.length()));
+                    for (int n = 0; n < jsonArray.length(); n++) {
+                        Log.d("IN", "sdasd");
+                        try {
+                            JSONObject object = jsonArray.getJSONObject(n);
+                            String description = object.getString("description");
+                            String id = object.getString("id");
+                            String name = object.getString("name");
+                            Playlist playlist = new Playlist(description, id, name);
+                            play.add(playlist);
+                            Log.d("Size", play.get(n).getName());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    callBack.onSuccess();
+
+                }, error -> {
+                    // TODO: Handle error
+
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String token = sharedPreferences.getString("token", "");
+                String auth = "Bearer " + token;
+                headers.put("Authorization", auth);
+                headers.put("limit", "50");
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
+        return play;
+    }
+
+    public void addSongToPlaylist(Playlist playlist, Song song) {
+        String endpoint = "https://api.spotify.com/v1/playlists/";
+        endpoint += playlist.getId();
+        endpoint += "/tracks";
+        JSONArray tracksArray = new JSONArray();
+        String name = "";
+        name += "spotify:track:";
+        name += song.getId();
+        tracksArray.put(name);
+        JSONObject dataObject = new JSONObject();
+        try {
+            dataObject.put("uris", (Object) tracksArray);
+        } catch (
+                JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, endpoint, dataObject, response -> {
+                }, error -> {
+                    // TODO: Handle error
+
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String token = sharedPreferences.getString("token", "");
+                String auth = "Bearer " + token;
+                headers.put("Authorization", auth);
+
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
+    }
+
+
+    public void checkIfSongIsOnPlaylist(Context context,Playlist playlist, Song song) {
+        String endpoint = "https://api.spotify.com/v1/playlists/" + playlist.getId() + "/tracks";
+        ArrayList<String> songsOnPlaylist = new ArrayList<>();
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, endpoint, null, response -> {
+                    JSONArray jsonArray = response.optJSONArray("items");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        try {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            JSONObject object = jsonObject.getJSONObject("track");
+                            String id = object.getString("id");
+                            String name = object.getString("name");
+                            songsOnPlaylist.add(id);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (!songsOnPlaylist.contains(song.getId())) {
+                        addSongToPlaylist(playlist, song);
+                        Toast.makeText(context, "Piosenka została dodana", Toast.LENGTH_SHORT).show();
+
+                    }
+                    else{
+                        Toast.makeText(context, "Piosenka już znajduje się na playliście.", Toast.LENGTH_SHORT).show();
+                    }
+
+                }, error -> {
+                    // TODO: Handle error
+
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String token = sharedPreferences.getString("token", "");
+                String auth = "Bearer " + token;
+                headers.put("Authorization", auth);
+
+                return headers;
+            }
+        };
+        queue.add(jsonObjectRequest);
+
+    }
+
 }

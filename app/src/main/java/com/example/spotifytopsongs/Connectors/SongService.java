@@ -158,7 +158,7 @@ public class SongService {
      * Getting array of songs that user listened to the most in short period of time (4 weeks)
      */
     public ArrayList<Song> getTopSongsFromSpotify(final VolleyCallBack callBack) {
-        String endpoint = "https://api.spotify.com/v1/me/top/tracks";
+        String endpoint = "https://api.spotify.com/v1/me/top/tracks?time_range=short_term";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, endpoint, null, response -> {
                     JSONArray jsonArray = response.optJSONArray("items");
@@ -181,6 +181,7 @@ public class SongService {
                                 }
                             }
                             Song song = new Song(id, name, artists, coverURL, spotifyURL);
+                            Log.d("SONG", song.getName());
                             topSongs.add(song);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -197,7 +198,6 @@ public class SongService {
                 String token = sharedPreferences.getString("token", "");
                 String auth = "Bearer " + token;
                 headers.put("Authorization", auth);
-                headers.put("time_range", "short_term");
                 return headers;
             }
         };

@@ -14,8 +14,10 @@ import android.widget.TextView;
 
 import com.example.spotifytopsongs.Adapters.ListViewAdapter;
 import com.example.spotifytopsongs.Adapters.SpinnerAdapter;
+import com.example.spotifytopsongs.Connectors.ArtistService;
 import com.example.spotifytopsongs.Connectors.PlaylistService;
 import com.example.spotifytopsongs.Connectors.SongService;
+import com.example.spotifytopsongs.Models.Artist;
 import com.example.spotifytopsongs.Models.Playlist;
 import com.example.spotifytopsongs.Models.Song;
 
@@ -38,8 +40,10 @@ public class BasicActivity extends AppCompatActivity {
     private Song currentSong;
     private SongService songService;
     private PlaylistService playlistService;
+    private ArtistService artistService;
     private ArrayList<Song> recentlyPlayedTracks;
     private ArrayList<Song> topSongs;
+    private ArrayList<Artist> topArtists;
     private Button createPlaylistButton;
     private ArrayList<Playlist> playlists;
     private int Counter = 0;
@@ -55,6 +59,7 @@ public class BasicActivity extends AppCompatActivity {
 
         songService = new SongService(getApplicationContext());
         playlistService = new PlaylistService(getApplicationContext());
+        artistService = new ArtistService(getApplicationContext());
         userView = (TextView) findViewById(R.id.user);
         songView = (TextView) findViewById(R.id.song);
         refresh = (Button) findViewById(R.id.refresh);
@@ -71,6 +76,7 @@ public class BasicActivity extends AppCompatActivity {
         getPlaylists();
         getTracks();
         getCurrentSong();
+        getTopArtists();
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,8 +167,23 @@ public class BasicActivity extends AppCompatActivity {
         );
     }
 
+    private void getTopArtists() {
+        artistService.getTopArtistsFromSpotify(() -> {
+                    topArtists = artistService.getTopArtists();
+//                    updateTopArtists();
+                }
+        );
+    }
+
     private void updateTopSongs() {
         if (topSongs.size() > 0) {
+            ListViewAdapter listViewAdapter = new ListViewAdapter(this, topSongs);
+            topSongsListView.setAdapter(listViewAdapter);
+        }
+    }
+
+    private void updateTopArtists() {
+        if (topArtists.size() > 0) {
             ListViewAdapter listViewAdapter = new ListViewAdapter(this, topSongs);
             topSongsListView.setAdapter(listViewAdapter);
         }

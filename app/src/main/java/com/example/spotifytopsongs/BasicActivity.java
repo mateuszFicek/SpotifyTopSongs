@@ -2,6 +2,7 @@ package com.example.spotifytopsongs;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ import com.example.spotifytopsongs.Adapters.SpinnerAdapter;
 import com.example.spotifytopsongs.Connectors.ArtistService;
 import com.example.spotifytopsongs.Connectors.PlaylistService;
 import com.example.spotifytopsongs.Connectors.SongService;
+import com.example.spotifytopsongs.Database.DatabaseHelper;
 import com.example.spotifytopsongs.Models.Artist;
 import com.example.spotifytopsongs.Models.Playlist;
 import com.example.spotifytopsongs.Models.Song;
@@ -51,7 +53,9 @@ public class BasicActivity extends AppCompatActivity {
     private Spinner spinner;
     private SpinnerAdapter spinnerAdapter;
     private Playlist currentPlaylist;
-
+    DatabaseHelper mDatabaseHelper;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,13 +74,16 @@ public class BasicActivity extends AppCompatActivity {
         createPlaylistButton = (Button) findViewById(R.id.createPlaylistButton);
         spinner = (Spinner) findViewById(R.id.playlistSpinner);
 
-        SharedPreferences sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
+        sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
+        editor = sharedPreferences.edit();
         userView.setText(sharedPreferences.getString("userid", "No User"));
         getTopSongs();
         getPlaylists();
         getTracks();
         getCurrentSong();
         getTopArtists();
+        mDatabaseHelper = new DatabaseHelper(this);
+
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,7 +108,7 @@ public class BasicActivity extends AppCompatActivity {
         addSongButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(currentPlaylist != null && currentSong != null){
+                if (currentPlaylist != null && currentSong != null) {
                     playlistService.checkIfSongIsOnPlaylist(getApplicationContext(), currentPlaylist, currentSong);
                 }
             }
@@ -127,6 +134,37 @@ public class BasicActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void addAllSongs() {
+        for (Song song : topSongs) {
+            AddDataToDB(song.getId());
+        }
+    }
+
+    public void AddDataToDB(String newEntry) {
+        boolean insertData = mDatabaseHelper.addDataToday(newEntry);
+        if (insertData) {
+            Log.d(newEntry, "UDALO SIE");
+        } else {
+            Log.d(newEntry, "Sth WENT WRONG");
+        }
+    }
+
+    public void getDataFromDatabase() {
+        Cursor dataFromYesterday = mDatabaseHelper.getYesterdayData();
+        for (Song song : topSongs) {
+            int currentPosition = topSongs.indexOf(song);
+            int lastPosition = 99;
+            while (dataFromYesterday.moveToNext()) {
+                if (dataFromYesterday.getString(1) == song.getId()) {
+                    lastPosition = dataFromYesterday.getPosition();
+                    break;
+                }
+            }
+
+            Log.d(song.getId(), "POS " + lastPosition);
+        }
     }
 
 
@@ -163,6 +201,17 @@ public class BasicActivity extends AppCompatActivity {
         songService.getTopSongsFromSpotify(() -> {
                     topSongs = songService.getTopSongs();
                     updateTopSongs();
+                    boolean shouldUpdateHistory = sharedPreferences.getBoolean("SHOULD_SAVE_DATA", false);
+                    Log.d("SHOULD UPDATE", shouldUpdateHistory + "");
+                    if (shouldUpdateHistory) {
+                        mDatabaseHelper.clearYesterday();
+                        mDatabaseHelper.moveFromTodayToYesterday();
+                        mDatabaseHelper.clearToday();
+                        addAllSongs();
+                        editor.putBoolean("SHOULD_SAVE_DATA", false);
+                        editor.commit();
+                    }
+                    getDataFromDatabase();
                 }
         );
     }

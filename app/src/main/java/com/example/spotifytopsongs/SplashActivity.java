@@ -1,5 +1,6 @@
 package com.example.spotifytopsongs;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,6 +22,11 @@ import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 import com.example.spotifytopsongs.Connectors.UserServices;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 
 /**
  * Start Activity, authenticate Spotify
@@ -28,8 +34,7 @@ import com.example.spotifytopsongs.Connectors.UserServices;
 public class SplashActivity extends AppCompatActivity{
 
     private SharedPreferences.Editor editor;
-    private SharedPreferences msharedPreferences;
-
+    SharedPreferences prefs;
     private RequestQueue queue;
 
     private static final String CLIENT_ID = "b597baec755a46d0934470305a5015de";
@@ -45,15 +50,26 @@ public class SplashActivity extends AppCompatActivity{
         getSupportActionBar().hide();
         setContentView(R.layout.activity_splash);
 
+         prefs = this.getSharedPreferences(
+                "SPOTIFY", Context.MODE_PRIVATE);
+        String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+        String value = prefs.getString("DATE", "");
+        if((value == "" || value != currentDate) && prefs.getBoolean("SHOULD_SAVE_DATA", true)){
+            editor = prefs.edit();
+            editor.putString("DATE", currentDate);
+            editor.putBoolean("SHOULD_SAVE_DATA", true);
+            editor.commit();
+        }
 
+        Log.d("Date", prefs.getString("DATE", ""));
+        Log.d("SHOULD", String.valueOf(prefs.getBoolean("SHOULD_SAVE_DATA",true)));
         authenticateSpotify();
 
-        msharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
         queue = Volley.newRequestQueue(this);
     }
 
     private void waitForUserInfo() {
-        UserServices userService = new UserServices(queue, msharedPreferences);
+        UserServices userService = new UserServices(queue, prefs);
         userService.get(() -> {
             User user = userService.getUser();
             editor = getSharedPreferences("SPOTIFY", 0).edit();

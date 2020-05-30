@@ -24,6 +24,7 @@ import com.example.spotifytopsongs.Models.Playlist;
 import com.example.spotifytopsongs.Models.Song;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -53,6 +54,7 @@ public class BasicActivity extends AppCompatActivity {
     private Spinner spinner;
     private SpinnerAdapter spinnerAdapter;
     private Playlist currentPlaylist;
+    private HashMap<Integer, Integer> differenceSinceLastUpdate;
     DatabaseHelper mDatabaseHelper;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -77,6 +79,7 @@ public class BasicActivity extends AppCompatActivity {
         sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
         editor = sharedPreferences.edit();
         userView.setText(sharedPreferences.getString("userid", "No User"));
+        differenceSinceLastUpdate = new HashMap<>();
         getTopSongs();
         getPlaylists();
         getTracks();
@@ -117,7 +120,6 @@ public class BasicActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Song item = (Song) topSongsListView.getItemAtPosition(position);
-                Log.d("LINK", item.getSpotifyURL());
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getSpotifyURL()));
                 startActivity(browserIntent);
             }
@@ -157,13 +159,19 @@ public class BasicActivity extends AppCompatActivity {
             int currentPosition = topSongs.indexOf(song);
             int lastPosition = 99;
             while (dataFromYesterday.moveToNext()) {
+                Log.d("ZERO COL : ", dataFromYesterday.getString(0));
+                Log.d("FIRST COL: ", dataFromYesterday.getString(1));
                 if (dataFromYesterday.getString(1) == song.getId()) {
                     lastPosition = dataFromYesterday.getPosition();
                     break;
                 }
             }
 
-            Log.d(song.getId(), "POS " + lastPosition);
+            if(lastPosition == 99)
+                differenceSinceLastUpdate.put(currentPosition,lastPosition);
+            else{
+                differenceSinceLastUpdate.put(currentPosition, lastPosition-currentPosition);
+            }
         }
     }
 
@@ -226,14 +234,14 @@ public class BasicActivity extends AppCompatActivity {
 
     private void updateTopSongs() {
         if (topSongs.size() > 0) {
-            ListViewAdapter listViewAdapter = new ListViewAdapter(this, topSongs);
+            ListViewAdapter listViewAdapter = new ListViewAdapter(this, topSongs, differenceSinceLastUpdate);
             topSongsListView.setAdapter(listViewAdapter);
         }
     }
 
     private void updateTopArtists() {
         if (topArtists.size() > 0) {
-            ListViewAdapter listViewAdapter = new ListViewAdapter(this, topSongs);
+            ListViewAdapter listViewAdapter = new ListViewAdapter(this, topSongs, differenceSinceLastUpdate);
             topSongsListView.setAdapter(listViewAdapter);
         }
     }

@@ -54,10 +54,11 @@ public class BasicActivity extends AppCompatActivity {
     private Spinner spinner;
     private SpinnerAdapter spinnerAdapter;
     private Playlist currentPlaylist;
-    private HashMap<Integer, Integer> differenceSinceLastUpdate;
     DatabaseHelper mDatabaseHelper;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+    Cursor yesterdayData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +80,6 @@ public class BasicActivity extends AppCompatActivity {
         sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
         editor = sharedPreferences.edit();
         userView.setText(sharedPreferences.getString("userid", "No User"));
-        differenceSinceLastUpdate = new HashMap<>();
         getTopSongs();
         getPlaylists();
         getTracks();
@@ -140,38 +140,17 @@ public class BasicActivity extends AppCompatActivity {
 
     public void addAllSongs() {
         for (Song song : topSongs) {
-            AddDataToDB(song.getId());
+            int pos = topSongs.indexOf(song);
+            AddDataToDB(pos, song.getId());
         }
     }
 
-    public void AddDataToDB(String newEntry) {
-        boolean insertData = mDatabaseHelper.addDataToday(newEntry);
+    public void AddDataToDB(int pos, String newEntry) {
+        boolean insertData = mDatabaseHelper.addDataToday(pos, newEntry);
         if (insertData) {
             Log.d(newEntry, "UDALO SIE");
         } else {
             Log.d(newEntry, "Sth WENT WRONG");
-        }
-    }
-
-    public void getDataFromDatabase() {
-        Cursor dataFromYesterday = mDatabaseHelper.getYesterdayData();
-        for (Song song : topSongs) {
-            int currentPosition = topSongs.indexOf(song);
-            int lastPosition = 99;
-            while (dataFromYesterday.moveToNext()) {
-                Log.d("ZERO COL : ", dataFromYesterday.getString(0));
-                Log.d("FIRST COL: ", dataFromYesterday.getString(1));
-                if (dataFromYesterday.getString(1) == song.getId()) {
-                    lastPosition = dataFromYesterday.getPosition();
-                    break;
-                }
-            }
-
-            if(lastPosition == 99)
-                differenceSinceLastUpdate.put(currentPosition,lastPosition);
-            else{
-                differenceSinceLastUpdate.put(currentPosition, lastPosition-currentPosition);
-            }
         }
     }
 
@@ -208,8 +187,8 @@ public class BasicActivity extends AppCompatActivity {
     private void getTopSongs() {
         songService.getTopSongsFromSpotify(() -> {
                     topSongs = songService.getTopSongs();
-                    updateTopSongs();
-                    boolean shouldUpdateHistory = sharedPreferences.getBoolean("SHOULD_SAVE_DATA", false);
+                    yesterdayData = mDatabaseHelper.getYesterdayData();
+                    boolean shouldUpdateHistory = sharedPreferences.getBoolean("SHOULD_SAVE_DATA", true);
                     Log.d("SHOULD UPDATE", shouldUpdateHistory + "");
                     if (shouldUpdateHistory) {
                         mDatabaseHelper.clearYesterday();
@@ -219,7 +198,7 @@ public class BasicActivity extends AppCompatActivity {
                         editor.putBoolean("SHOULD_SAVE_DATA", false);
                         editor.commit();
                     }
-                    getDataFromDatabase();
+                    updateTopSongs();
                 }
         );
     }
@@ -234,14 +213,14 @@ public class BasicActivity extends AppCompatActivity {
 
     private void updateTopSongs() {
         if (topSongs.size() > 0) {
-            ListViewAdapter listViewAdapter = new ListViewAdapter(this, topSongs, differenceSinceLastUpdate);
+            ListViewAdapter listViewAdapter = new ListViewAdapter(this, topSongs, yesterdayData);
             topSongsListView.setAdapter(listViewAdapter);
         }
     }
 
     private void updateTopArtists() {
         if (topArtists.size() > 0) {
-            ListViewAdapter listViewAdapter = new ListViewAdapter(this, topSongs, differenceSinceLastUpdate);
+            ListViewAdapter listViewAdapter = new ListViewAdapter(this, topSongs, yesterdayData);
             topSongsListView.setAdapter(listViewAdapter);
         }
     }

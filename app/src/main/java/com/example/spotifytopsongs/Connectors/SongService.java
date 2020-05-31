@@ -181,7 +181,6 @@ public class SongService {
                                 }
                             }
                             Song song = new Song(id, name, artists, coverURL, spotifyURL);
-                            Log.d("SONG", song.getName());
                             topSongs.add(song);
                         } catch (JSONException e) {
                             e.printStackTrace();

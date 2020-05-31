@@ -51,20 +51,18 @@ public class SplashActivity extends AppCompatActivity{
         setContentView(R.layout.activity_splash);
 
          prefs = this.getSharedPreferences(
-                "SPOTIFY", Context.MODE_PRIVATE);
-        String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
-        String value = prefs.getString("DATE", "");
-        if((value == "" || value != currentDate) && prefs.getBoolean("SHOULD_SAVE_DATA", true)){
+                "SPOTIFY", 0);
+        String currentDate = new SimpleDateFormat("w", Locale.getDefault()).format(new Date());
+        String value = prefs.getString("DATE", "none");
+        boolean shouldUpdate = prefs.getBoolean("SHOULD_SAVE_DATA", true);
+        if(value.equals("none")|| (!shouldUpdate && !value.equals(currentDate))){
+            Log.d("SHOULDIN", value);
             editor = prefs.edit();
             editor.putString("DATE", currentDate);
             editor.putBoolean("SHOULD_SAVE_DATA", true);
             editor.commit();
         }
-
-        Log.d("Date", prefs.getString("DATE", ""));
-        Log.d("SHOULD", String.valueOf(prefs.getBoolean("SHOULD_SAVE_DATA",true)));
         authenticateSpotify();
-
         queue = Volley.newRequestQueue(this);
     }
 

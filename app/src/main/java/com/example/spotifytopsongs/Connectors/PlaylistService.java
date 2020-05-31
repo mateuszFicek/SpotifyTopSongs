@@ -69,14 +69,12 @@ public class PlaylistService {
         }
         endpoint += user;
         endpoint += "/playlists";
-        Log.d("ENDPOINT", endpoint);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.POST, endpoint, dataObject, response -> {
                     try {
                         Log.d("Respo", response.toString());
                         String description = response.getString("description");
                         String id = response.getString("id");
-                        Log.d("PLAYLISTID", id);
                         String name = response.getString("name");
                         playlist = new Playlist(description, id, name);
                     } catch (JSONException e) {
@@ -106,9 +104,7 @@ public class PlaylistService {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, endpoint, null, response -> {
                     JSONArray jsonArray = response.optJSONArray("items");
-                    Log.d("size", Integer.toString(jsonArray.length()));
                     for (int n = 0; n < jsonArray.length(); n++) {
-                        Log.d("IN", "sdasd");
                         try {
                             JSONObject object = jsonArray.getJSONObject(n);
                             String description = object.getString("description");
@@ -116,7 +112,6 @@ public class PlaylistService {
                             String name = object.getString("name");
                             Playlist playlist = new Playlist(description, id, name);
                             play.add(playlist);
-                            Log.d("Size", play.get(n).getName());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

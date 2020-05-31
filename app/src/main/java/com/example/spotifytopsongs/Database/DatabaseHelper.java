@@ -13,7 +13,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
     private static final String TABLE_NAME_YESTERDAY = "top_songs_yesterday";
     private static final String TABLE_NAME_TODAY = "top_songs_today";
-    private static final String COL1 = "number";
+    private static final String COL1 = "position";
     private static final String COL2 = "songID";
 
     public DatabaseHelper(Context context) {
@@ -22,8 +22,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTable1 = "CREATE TABLE " + TABLE_NAME_YESTERDAY + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " + COL2 + " TEXT)";
-        String createTable2 = "CREATE TABLE " + TABLE_NAME_TODAY + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " + COL2 + " TEXT)";
+        String createTable1 = "CREATE TABLE " + TABLE_NAME_YESTERDAY + " (" + COL1 +" INTEGER, " + COL2 + " TEXT)";
+        String createTable2 = "CREATE TABLE " + TABLE_NAME_TODAY + " (" + COL1 + " INTEGER, " + COL2 + " TEXT)";
         db.execSQL(createTable1);
         db.execSQL(createTable2);
     }
@@ -37,17 +37,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void clearToday(){
         SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_NAME_TODAY);
         db.delete(TABLE_NAME_TODAY,null,null);
     }
 
     public void clearYesterday(){
         SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_NAME_YESTERDAY);
         db.delete(TABLE_NAME_YESTERDAY,null,null);
     }
 
-    public boolean addDataToday(String item){
+    public boolean addDataToday(int pos, String item){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        contentValues.put(COL1, pos);
         contentValues.put(COL2, item);
 
         Log.d(TAG, "addData: Adding... " + item + " to " + TABLE_NAME_TODAY);
@@ -58,9 +61,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return true;
     }
 
-    public boolean addDataYesterday(String item){
+    public boolean addDataYesterday(int pos, String item){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        contentValues.put(COL1, pos);
         contentValues.put(COL2, item);
 
         Log.d(TAG, "addData: Adding... " + item + " to " + TABLE_NAME_YESTERDAY);
@@ -76,8 +80,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(TABLE_NAME_YESTERDAY,null,null);
         String query = "SELECT * FROM " + TABLE_NAME_TODAY;
         Cursor data = db.rawQuery(query,null);
+        int counter = 0;
         while(data.moveToNext()){
-            addDataYesterday(data.getString(1));
+            addDataYesterday(counter, data.getString(1));
+            counter++;
         }
     }
 

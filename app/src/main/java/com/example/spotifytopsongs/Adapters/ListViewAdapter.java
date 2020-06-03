@@ -2,6 +2,7 @@ package com.example.spotifytopsongs.Adapters;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -51,17 +52,28 @@ public class ListViewAdapter extends ArrayAdapter<Song> {
         ImageView cover = (ImageView) convertView.findViewById(R.id.coverImage);
         TextView positionView = (TextView) convertView.findViewById(R.id.positionYesterday);
         TextView positionToday = (TextView) convertView.findViewById(R.id.positionToday);
+        TextView differenceView = (TextView) convertView.findViewById(R.id.difference);
+
         artist.setText(song.getArtist());
         title.setText(song.getName());
         positionView.setWidth(100);
-        if(!posLast[position].equals("New")){
-            int posInt = Integer.parseInt(posLast[position]);
-            posInt +=1;
+        int posInt = 0;
+        int diffPos = 0;
+        if (!posLast[position].equals("New")) {
+            posInt = Integer.parseInt(posLast[position]);
+            posInt += 1;
             positionView.setText("Last - " + posInt);
-        } else{
+        } else {
             positionView.setText("New");
         }
         positionToday.setText("Today - " + (position + 1));
+        diffPos = posInt - position - 1;
+        if (posLast[position].equals("New"))
+            diffPos = 0;
+        if (diffPos == 0) differenceView.setTextColor(Color.parseColor("#0000FF"));
+        else if (diffPos > 0) differenceView.setTextColor(Color.parseColor("#00FF00"));
+        else differenceView.setTextColor(Color.parseColor("#FF0000"));
+        differenceView.setText(diffPos + "");
         artist.setSelected(true);
         title.setSelected(true);
         Picasso.get().load(song.getAlbumCoverURL()).into(cover);
@@ -72,19 +84,19 @@ public class ListViewAdapter extends ArrayAdapter<Song> {
     public static String[] checkLastPosition(Cursor yesterdayData, ArrayList<Song> topSongsList) {
         String[] pos = new String[20];
         int counter = 0;
-        while (yesterdayData.moveToNext()) {
-            for (int i = 0; i < topSongsList.size(); i++) {
+        for (int i = 0; i < topSongsList.size(); i++) {
+            while (yesterdayData.moveToNext()) {
                 if (yesterdayData.getString(1).trim().equals(topSongsList.get(i).getId().trim())) {
                     Log.d("MATCH", yesterdayData.getString(0));
                     pos[counter] = (yesterdayData.getString(0));
                     Log.d("POS", pos[counter]);
-                    break;
                 }
             }
-            if(pos[counter] == null){
+            if (pos[counter] == null) {
                 pos[counter] = "New";
             }
             counter++;
+            yesterdayData.moveToFirst();
         }
 
         return (pos);

@@ -188,25 +188,15 @@
         android:background="@drawable/custom_button"
         android:text="Stwórz playlistę z poniższymi piosenkami"
         app:layout_constraintBottom_toTopOf="@+id/refresh"
-        app:layout_constraintTop_toBottomOf="@id/top" />
+        />
 
-    <TextView
-        android:id="@+id/top"
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Najczęściej odtwarzane (Naciśnij, aby odtworzyć w Spotify)"
-        android:textColor="@color/colorFontBright"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/createPlaylistButton" />
+        android:text="Przejdź do swoich top"
+        android:id="@+id/topButton"
+        app:layout_constraintTop_toBottomOf="@+id/createPlaylistButton"/>
 
-    <ListView
-        android:id="@+id/topSongsListView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+
 
 </LinearLayout>

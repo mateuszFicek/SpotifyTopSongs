@@ -40,6 +40,7 @@ public class BasicActivity extends AppCompatActivity {
     private ListView topSongsListView;
     private Button refresh;
     private Button addSongButton;
+    private Button topButton;
     private Song currentSong;
     private SongService songService;
     private PlaylistService playlistService;
@@ -71,9 +72,8 @@ public class BasicActivity extends AppCompatActivity {
         songView = (TextView) findViewById(R.id.song);
         refresh = (Button) findViewById(R.id.refresh);
         addSongButton = (Button) findViewById(R.id.addSong);
-
+        topButton = (Button) findViewById(R.id.topButton);
         currentSongView = (TextView) findViewById(R.id.currentSong);
-        topSongsListView = (ListView) findViewById(R.id.topSongsListView);
         createPlaylistButton = (Button) findViewById(R.id.createPlaylistButton);
         spinner = (Spinner) findViewById(R.id.playlistSpinner);
 
@@ -84,8 +84,6 @@ public class BasicActivity extends AppCompatActivity {
         getPlaylists();
         getTracks();
         getCurrentSong();
-        getTopArtists();
-        mDatabaseHelper = new DatabaseHelper(this);
 
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,14 +114,7 @@ public class BasicActivity extends AppCompatActivity {
                 }
             }
         });
-        topSongsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Song item = (Song) topSongsListView.getItemAtPosition(position);
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getSpotifyURL()));
-                startActivity(browserIntent);
-            }
-        });
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -136,24 +127,15 @@ public class BasicActivity extends AppCompatActivity {
 
             }
         });
-    }
 
-    public void addAllSongs() {
-        for (Song song : topSongs) {
-            int pos = topSongs.indexOf(song);
-            AddDataToDB(pos, song.getId());
-        }
+        topButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), TopActivity.class);
+                startActivity(intent);
+            }
+        });
     }
-
-    public void AddDataToDB(int pos, String newEntry) {
-        boolean insertData = mDatabaseHelper.addDataToday(pos, newEntry);
-        if (insertData) {
-            Log.d(newEntry, "UDALO SIE");
-        } else {
-            Log.d(newEntry, "Sth WENT WRONG");
-        }
-    }
-
 
     private void getTracks() {
         songService.getRecentlyPlayedTracks(() -> {
@@ -187,42 +169,8 @@ public class BasicActivity extends AppCompatActivity {
     private void getTopSongs() {
         songService.getTopSongsFromSpotify(() -> {
                     topSongs = songService.getTopSongs();
-                    yesterdayData = mDatabaseHelper.getYesterdayData();
-                    boolean shouldUpdateHistory = sharedPreferences.getBoolean("SHOULD_SAVE_DATA", true);
-                    Log.d("SHOULD UPDATE", shouldUpdateHistory + "");
-                    if (shouldUpdateHistory) {
-                        mDatabaseHelper.clearYesterday();
-                        mDatabaseHelper.moveFromTodayToYesterday();
-                        mDatabaseHelper.clearToday();
-                        addAllSongs();
-                        editor.putBoolean("SHOULD_SAVE_DATA", false);
-                        editor.commit();
-                    }
-                    updateTopSongs();
                 }
         );
-    }
-
-    private void getTopArtists() {
-        artistService.getTopArtistsFromSpotify(() -> {
-                    topArtists = artistService.getTopArtists();
-//                    updateTopArtists();
-                }
-        );
-    }
-
-    private void updateTopSongs() {
-        if (topSongs.size() > 0) {
-            ListViewAdapter listViewAdapter = new ListViewAdapter(this, topSongs, yesterdayData);
-            topSongsListView.setAdapter(listViewAdapter);
-        }
-    }
-
-    private void updateTopArtists() {
-        if (topArtists.size() > 0) {
-            ListViewAdapter listViewAdapter = new ListViewAdapter(this, topSongs, yesterdayData);
-            topSongsListView.setAdapter(listViewAdapter);
-        }
     }
 
     private void createPlaylist() {
@@ -243,6 +191,4 @@ public class BasicActivity extends AppCompatActivity {
         }
 
     }
-
-
 }

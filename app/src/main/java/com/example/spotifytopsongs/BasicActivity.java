@@ -1,9 +1,13 @@
 package com.example.spotifytopsongs;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +16,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.spotifytopsongs.Adapters.ListViewAdapter;
 import com.example.spotifytopsongs.Adapters.SpinnerAdapter;
@@ -128,7 +133,7 @@ public class BasicActivity extends AppCompatActivity {
             }
         });
 
-        topButton.setOnClickListener(new View.OnClickListener(){
+        topButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), TopActivity.class);
@@ -190,5 +195,43 @@ public class BasicActivity extends AppCompatActivity {
             spinner.setAdapter(spinnerAdapter);
         }
 
+    }
+
+    private BroadcastReceiver wifiState = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int wifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN);
+            switch (wifiState) {
+                case WifiManager.WIFI_STATE_ENABLED:
+                    topButton.setEnabled(true);
+                    addSongButton.setEnabled(true);
+                    refresh.setEnabled(true);
+                    addSongButton.setEnabled(true);
+                    Toast toastEn = Toast.makeText(getApplicationContext(), "Wifi is enabled. Buttons enabled.", Toast.LENGTH_LONG);
+                    toastEn.show();
+                    break;
+                case WifiManager.WIFI_STATE_DISABLED:
+                    topButton.setEnabled(false);
+                    addSongButton.setEnabled(false);
+                    refresh.setEnabled(false);
+                    addSongButton.setEnabled(false);
+                    Toast toastDis = Toast.makeText(getApplicationContext(), "Wifi is disabled. Buttons disabled.", Toast.LENGTH_LONG);
+                    toastDis.show();
+                    break;
+            }
+        }
+    };
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        registerReceiver(wifiState, intentFilter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(wifiState);
     }
 }

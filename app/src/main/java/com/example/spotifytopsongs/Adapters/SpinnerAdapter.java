@@ -65,7 +65,5 @@ public class SpinnerAdapter extends ArrayAdapter {
             textView.setText(playlist.getName());
         }
         return convertView;
-
-
     }
 }

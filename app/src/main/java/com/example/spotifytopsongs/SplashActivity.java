@@ -1,6 +1,5 @@
 package com.example.spotifytopsongs;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,11 +7,6 @@ import android.util.Log;
 import android.view.Window;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
-
-import android.os.Bundle;
-import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -23,15 +17,13 @@ import com.spotify.sdk.android.authentication.AuthenticationResponse;
 import com.example.spotifytopsongs.Connectors.UserServices;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-
 
 /**
  * Start Activity, authenticate Spotify
  */
-public class SplashActivity extends AppCompatActivity{
+public class SplashActivity extends AppCompatActivity {
 
     private SharedPreferences.Editor editor;
     SharedPreferences prefs;
@@ -50,12 +42,12 @@ public class SplashActivity extends AppCompatActivity{
         getSupportActionBar().hide();
         setContentView(R.layout.activity_splash);
 
-         prefs = this.getSharedPreferences(
+        prefs = this.getSharedPreferences(
                 "SPOTIFY", 0);
         String currentDate = new SimpleDateFormat("w", Locale.getDefault()).format(new Date());
         String value = prefs.getString("DATE", "none");
         boolean shouldUpdate = prefs.getBoolean("SHOULD_SAVE_DATA", true);
-        if(value.equals("none")|| (!shouldUpdate && !value.equals(currentDate))){
+        if (value.equals("none") || (!shouldUpdate && !value.equals(currentDate))) {
             Log.d("SHOULDIN", value);
             editor = prefs.edit();
             editor.putString("DATE", currentDate);
@@ -73,7 +65,6 @@ public class SplashActivity extends AppCompatActivity{
             editor = getSharedPreferences("SPOTIFY", 0).edit();
             editor.putString("userid", user.id);
             Log.d("USERID", user.id);
-            // We use commit instead of apply because we need the information stored immediately
             editor.commit();
             startMainActivity();
         });
@@ -95,7 +86,6 @@ public class SplashActivity extends AppCompatActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
 
-        // Check if result comes from the correct activity
         if (requestCode == REQUEST_CODE) {
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
             switch (response.getType()) {
@@ -106,15 +96,9 @@ public class SplashActivity extends AppCompatActivity{
                     editor.apply();
                     waitForUserInfo();
                     break;
-
-                // Auth flow returned an error
                 case ERROR:
-                    // Handle error response
                     break;
-
-                // Most likely auth flow was cancelled
                 default:
-                    // Handle other cases
             }
         }
     }

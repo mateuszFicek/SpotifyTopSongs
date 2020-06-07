@@ -2,25 +2,16 @@ package com.example.spotifytopsongs.Connectors;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.spotifytopsongs.Models.Playlist;
 import com.example.spotifytopsongs.Models.Song;
-import com.example.spotifytopsongs.PlaylistCallback;
 import com.example.spotifytopsongs.VolleyCallBack;
-import com.google.gson.Gson;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonObject;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -62,7 +53,6 @@ public class SongService {
         String endpoint = "https://api.spotify.com/v1/me/player/recently-played";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, endpoint, null, response -> {
-                    Gson gson = new Gson();
                     JSONArray jsonArray = response.optJSONArray("items");
                     for (int n = 0; n < jsonArray.length(); n++) {
                         try {
@@ -114,7 +104,6 @@ public class SongService {
         String endpoint = "https://api.spotify.com/v1/me/player/currently-playing";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, endpoint, null, response -> {
-                    Gson gson = new Gson();
                     JSONObject jsonObject = response.optJSONObject("item");
                     try {
                         String name = jsonObject.getString("name");
@@ -203,6 +192,4 @@ public class SongService {
         queue.add(jsonObjectRequest);
         return topSongs;
     }
-
-
 }

@@ -77,5 +77,4 @@ public class ArtistService {
         queue.add(jsonObjectRequest);
         return topArtists;
     }
-
 }

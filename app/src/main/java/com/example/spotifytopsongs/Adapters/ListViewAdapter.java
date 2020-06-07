@@ -3,7 +3,6 @@ package com.example.spotifytopsongs.Adapters;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,22 +10,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.example.spotifytopsongs.Models.Song;
 import com.example.spotifytopsongs.R;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class ListViewAdapter extends ArrayAdapter<Song> {
-    Context context;
     ArrayList<Song> topSongsList;
     Cursor yesterdayData;
     String[] posLast;
@@ -45,7 +36,6 @@ public class ListViewAdapter extends ArrayAdapter<Song> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.row, parent, false);
         }
-
 
         TextView artist = (TextView) convertView.findViewById(R.id.artistTextView);
         TextView title = (TextView) convertView.findViewById(R.id.titleTextView);
@@ -98,7 +88,6 @@ public class ListViewAdapter extends ArrayAdapter<Song> {
             counter++;
             yesterdayData.moveToFirst();
         }
-
         return (pos);
     }
 }

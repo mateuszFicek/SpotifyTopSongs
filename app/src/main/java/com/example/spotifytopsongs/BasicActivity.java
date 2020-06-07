@@ -6,30 +6,30 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.spotifytopsongs.Adapters.ListViewAdapter;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.example.spotifytopsongs.Adapters.SpinnerAdapter;
 import com.example.spotifytopsongs.Connectors.ArtistService;
 import com.example.spotifytopsongs.Connectors.PlaylistService;
 import com.example.spotifytopsongs.Connectors.SongService;
+import com.example.spotifytopsongs.Connectors.UserServices;
 import com.example.spotifytopsongs.Database.DatabaseHelper;
 import com.example.spotifytopsongs.Models.Artist;
 import com.example.spotifytopsongs.Models.Playlist;
 import com.example.spotifytopsongs.Models.Song;
+import com.example.spotifytopsongs.Models.User;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -42,17 +42,17 @@ public class BasicActivity extends AppCompatActivity {
     private TextView userView;
     private TextView songView;
     private TextView currentSongView;
-    private ListView topSongsListView;
     private Button refresh;
     private Button addSongButton;
     private Button topButton;
+    private ImageView userImage;
+
+    private UserServices userServices;
     private Song currentSong;
     private SongService songService;
     private PlaylistService playlistService;
-    private ArtistService artistService;
     private ArrayList<Song> recentlyPlayedTracks;
     private ArrayList<Song> topSongs;
-    private ArrayList<Artist> topArtists;
     private Button createPlaylistButton;
     private ArrayList<Playlist> playlists;
     private int Counter = 0;
@@ -60,19 +60,20 @@ public class BasicActivity extends AppCompatActivity {
     private Spinner spinner;
     private SpinnerAdapter spinnerAdapter;
     private Playlist currentPlaylist;
-    DatabaseHelper mDatabaseHelper;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
-    Cursor yesterdayData;
+    private RequestQueue queue;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_basic);
-
+        queue = Volley.newRequestQueue(this);
+        sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
+        userServices = new UserServices(queue, sharedPreferences);
         songService = new SongService(getApplicationContext());
         playlistService = new PlaylistService(getApplicationContext());
-        artistService = new ArtistService(getApplicationContext());
         userView = (TextView) findViewById(R.id.user);
         songView = (TextView) findViewById(R.id.song);
         refresh = (Button) findViewById(R.id.refresh);
@@ -81,14 +82,14 @@ public class BasicActivity extends AppCompatActivity {
         currentSongView = (TextView) findViewById(R.id.currentSong);
         createPlaylistButton = (Button) findViewById(R.id.createPlaylistButton);
         spinner = (Spinner) findViewById(R.id.playlistSpinner);
-
-        sharedPreferences = this.getSharedPreferences("SPOTIFY", 0);
+        userImage = (ImageView) findViewById(R.id.userImage);
         editor = sharedPreferences.edit();
         userView.setText(sharedPreferences.getString("userid", "No User"));
         getTopSongs();
         getPlaylists();
         getTracks();
         getCurrentSong();
+        getUser();
 
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,6 +140,13 @@ public class BasicActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), TopActivity.class);
                 startActivity(intent);
             }
+        });
+    }
+
+    private void getUser() {
+        userServices.get(() -> {
+            user = userServices.getUser();
+            new LoadImage(userImage).execute(user.getImageURL());
         });
     }
 
@@ -204,16 +212,14 @@ public class BasicActivity extends AppCompatActivity {
             switch (wifiState) {
                 case WifiManager.WIFI_STATE_ENABLED:
                     topButton.setEnabled(true);
-                    addSongButton.setEnabled(true);
-                    refresh.setEnabled(true);
+                    createPlaylistButton.setEnabled(true);
                     addSongButton.setEnabled(true);
                     Toast toastEn = Toast.makeText(getApplicationContext(), "Wifi is enabled. Buttons enabled.", Toast.LENGTH_LONG);
                     toastEn.show();
                     break;
                 case WifiManager.WIFI_STATE_DISABLED:
                     topButton.setEnabled(false);
-                    addSongButton.setEnabled(false);
-                    refresh.setEnabled(false);
+                    createPlaylistButton.setEnabled(false);
                     addSongButton.setEnabled(false);
                     Toast toastDis = Toast.makeText(getApplicationContext(), "Wifi is disabled. Buttons disabled.", Toast.LENGTH_LONG);
                     toastDis.show();

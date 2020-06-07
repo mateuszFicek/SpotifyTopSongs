@@ -11,6 +11,7 @@
         android:id="@+id/userList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
         android:padding="8dp"
         app:layout_constraintBottom_toTopOf="@id/recentList"
@@ -20,6 +21,7 @@
             android:id="@+id/hello"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
@@ -34,6 +36,7 @@
             android:id="@+id/user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
@@ -41,6 +44,20 @@
             android:textColor="@color/colorFontBright"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/userImage"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="2dp"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </LinearLayout>
 
@@ -131,7 +148,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/custom_button_refresh"
-            android:text="Refresh"
+            android:text="Odśwież"
             android:textColor="@color/colorFontBright"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/addSong"
@@ -144,7 +161,9 @@
             android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/custom_button_refresh"
-            android:text="Add Song"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="Dodaj piosenkę"
             android:textColor="@color/colorFontBright"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -184,19 +203,23 @@
         android:id="@+id/createPlaylistButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/custom_button"
-        android:text="Stwórz playlistę z poniższymi piosenkami"
-        app:layout_constraintBottom_toTopOf="@+id/refresh"
-        />
+        android:text="Stwórz playlistę z top piosenkami"
+        app:layout_constraintBottom_toTopOf="@+id/refresh" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Przejdź do swoich top"
         android:id="@+id/topButton"
-        app:layout_constraintTop_toBottomOf="@+id/createPlaylistButton"/>
-
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/top_button"
+        android:text="Przejdź do swoich top"
+        app:layout_constraintTop_toBottomOf="@+id/createPlaylistButton" />
 
 
 </LinearLayout>

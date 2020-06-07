@@ -1,43 +1,29 @@
 package com.example.spotifytopsongs.Connectors;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.spotifytopsongs.BasicActivity;
 import com.example.spotifytopsongs.Models.Playlist;
 import com.example.spotifytopsongs.Models.Song;
 import com.example.spotifytopsongs.PlaylistCallback;
 import com.example.spotifytopsongs.VolleyCallBack;
-import com.google.gson.JsonArray;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.lang.reflect.Array;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 
-/**
- * Callback class for creatingPlaylist and when it is successful it passes playlist to AddSongsOnCallback class.
- */
 public class PlaylistService {
     private SharedPreferences sharedPreferences;
     private RequestQueue queue;
-    private Song currentSong;
     private Playlist playlist;
-    private SharedPreferences.Editor editor;
     PlaylistCallback playlistCallback;
 
     public ArrayList<Playlist> getPlay() {
@@ -215,7 +201,6 @@ public class PlaylistService {
             }
         };
         queue.add(jsonObjectRequest);
-
     }
 
 }

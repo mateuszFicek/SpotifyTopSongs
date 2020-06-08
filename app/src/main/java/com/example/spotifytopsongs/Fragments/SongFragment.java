@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
+
 import com.example.spotifytopsongs.Adapters.ListViewAdapter;
 import com.example.spotifytopsongs.Connectors.SongService;
 import com.example.spotifytopsongs.Database.DatabaseHelper;
@@ -65,9 +67,13 @@ public class SongFragment extends Fragment {
 
     private void updateTopSongs() {
         if (topSongs.size() > 0) {
-            Log.d("TOPSIZE", topSongs.size() + "");
+            Log.d("TOPSIZE", topSongs.size() + "top");
             ListViewAdapter listViewAdapter = new ListViewAdapter(getContext(), topSongs, yesterdayData);
             topSongsListView.setAdapter(listViewAdapter);
+        } else {
+            Log.d("LE", "0");
+            Toast zeroLen = Toast.makeText(getActivity(), "Brak piosenek do wyświetlenia", Toast.LENGTH_LONG);
+            zeroLen.show();
         }
     }
 
@@ -79,7 +85,7 @@ public class SongFragment extends Fragment {
                     yesterdayData = mDatabaseHelper.getYesterdayData();
                     boolean shouldUpdateHistory = sharedPreferences.getBoolean("SHOULD_SAVE_DATA", true);
                     Log.d("SHOULD UPDATE", shouldUpdateHistory + "");
-                    if (shouldUpdateHistory) {
+                    if (shouldUpdateHistory && topSongs.size() > 0) {
                         mDatabaseHelper.clearYesterday();
                         mDatabaseHelper.moveFromTodayToYesterday();
                         mDatabaseHelper.clearToday();

@@ -6,8 +6,6 @@ import androidx.fragment.app.FragmentActivity;
 
 public class TopActivity extends FragmentActivity {
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -215,8 +215,6 @@ public class BasicActivity extends AppCompatActivity {
                     topButton.setEnabled(true);
                     createPlaylistButton.setEnabled(true);
                     addSongButton.setEnabled(true);
-                    Toast toastEn = Toast.makeText(getApplicationContext(), "Wifi is enabled. Buttons enabled.", Toast.LENGTH_LONG);
-                    toastEn.show();
                     break;
                 case WifiManager.WIFI_STATE_DISABLED:
                     topButton.setEnabled(false);

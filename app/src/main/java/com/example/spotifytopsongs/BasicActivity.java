@@ -146,7 +146,8 @@ public class BasicActivity extends AppCompatActivity {
     private void getUser() {
         userServices.get(() -> {
             user = userServices.getUser();
-            new LoadImage(userImage).execute(user.getImageURL());
+            if(!user.getImageURL().equals(""))
+                new LoadImage(userImage).execute(user.getImageURL());
         });
     }
 

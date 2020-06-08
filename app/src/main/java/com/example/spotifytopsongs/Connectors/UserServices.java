@@ -33,11 +33,15 @@ public class UserServices {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(ENDPOINT, null, response -> {
             try {
                 String id = response.getString("id");
-                String imageURL = response.getJSONArray("images").getJSONObject(0).getString("url");
+                String imageURL = "";
+                if(response.getJSONArray("images").length() > 0)
+                    response.getJSONArray("images").getJSONObject(0).getString("url");
+
                 Log.d("IM", imageURL);
                 this.user = new User(id, imageURL);
                 Log.d("USERIN", user.getImageURL());
             } catch (Exception e){
+                e.printStackTrace();
             }
             callBack.onSuccess();
         }, error -> get(() -> {

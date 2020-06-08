@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SpotifyTopSongs</string>
+    <string name="title_activity_top">Top</string>
 </resources>

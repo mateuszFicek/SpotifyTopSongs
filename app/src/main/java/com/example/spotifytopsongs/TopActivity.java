@@ -4,6 +4,9 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import androidx.fragment.app.FragmentActivity;
 
+/**
+ * Activity that displays two Fragments.
+ */
 public class TopActivity extends FragmentActivity {
 
     @Override

@@ -18,7 +18,7 @@ import java.util.Map;
 
 /**
  * Class which sends request to Spotify API and manages obtained json results.
- * This class is responsible for getting information about users currently listening songs, recently listened and top songs from short_term period.
+ * This class is responsible for getting information about users currently listened song, recently listened and top songs from short_term period.
  */
 public class SongService {
     private ArrayList<Song> songs = new ArrayList<>();

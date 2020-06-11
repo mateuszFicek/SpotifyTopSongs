@@ -1,7 +1,7 @@
 package com.example.spotifytopsongs.Models;
 
 /**
- * User class that could process user data from Spotify API.
+ * Model class that is used to create and store data about single User.
  */
 public class User {
     public String id;

@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Class which adds songs that are
+ * Callback class that is used to add songs to playlist.
  */
 public class AddSongsOnCallback implements PlaylistCallback {
     private RequestQueue queue;

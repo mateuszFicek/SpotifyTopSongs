@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+/**
+ * ListView adapter used to display list of top songs.
+ */
 public class ListViewAdapter extends ArrayAdapter<Song> {
     ArrayList<Song> topSongsList;
     Cursor yesterdayData;

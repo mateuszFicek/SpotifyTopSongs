@@ -5,6 +5,9 @@ import com.example.spotifytopsongs.Models.Song;
 
 import java.util.ArrayList;
 
+/**
+ * Callback function for Playlists.
+ */
 public interface PlaylistCallback {
     void onSuccess(Playlist playlist);
 }

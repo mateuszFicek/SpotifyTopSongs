@@ -21,6 +21,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Service used to get data from Spotify API about Artists.
+ */
 public class ArtistService {
     private ArrayList<Artist> topArtists = new ArrayList<>();
     private SharedPreferences sharedPreferences;
@@ -36,7 +39,7 @@ public class ArtistService {
     }
 
     /**
-     * Getting array of songs that user listened to the most in short period of time (4 weeks)
+     * Getting array of artists that user listened to the most in short period of time (4 weeks)
      */
     public ArrayList<Artist> getTopArtistsFromSpotify(final VolleyCallBack callBack) {
         String endpoint = "https://api.spotify.com/v1/me/top/artists?time_range=short_term";

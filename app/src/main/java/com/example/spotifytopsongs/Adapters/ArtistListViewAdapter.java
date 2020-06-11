@@ -13,7 +13,9 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-
+/**
+ * View adapter used to display top artists.
+ */
 public class ArtistListViewAdapter extends ArrayAdapter<Artist> {
 
     ArrayList<Artist> topArtistList;

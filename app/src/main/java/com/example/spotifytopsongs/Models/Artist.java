@@ -1,5 +1,8 @@
 package com.example.spotifytopsongs.Models;
 
+/**
+ * Model class that is used to create and store Artist data.
+ */
 public class Artist {
     public String getSpotifyURL() {
         return spotifyURL;

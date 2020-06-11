@@ -24,6 +24,9 @@ import com.example.spotifytopsongs.Models.Song;
 import com.example.spotifytopsongs.R;
 import java.util.ArrayList;
 
+/**
+ * Fragment that is used to display ListView with user's top songs.
+ */
 public class SongFragment extends Fragment {
 
     private ArrayList<Song> topSongs;

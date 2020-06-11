@@ -16,6 +16,10 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+/**
+ * Spinner adapter used to display all playlists user has.
+ * It's the dropdown menu that user can chose playlist from.
+ */
 public class SpinnerAdapter extends ArrayAdapter {
     ArrayList<Playlist> playlistsAll;
     public SpinnerAdapter(Context context, ArrayList<Playlist> playlists) {

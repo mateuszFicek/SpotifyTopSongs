@@ -19,7 +19,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * Service used to get and post data about User's playlists.
+ * It connects application with Spotify API.
+ */
 public class PlaylistService {
     private SharedPreferences sharedPreferences;
     private RequestQueue queue;

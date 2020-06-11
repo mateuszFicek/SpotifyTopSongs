@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Start Activity, authenticate Spotify
+ * Start Activity used to authenticate User.
  */
 public class SplashActivity extends AppCompatActivity {
 

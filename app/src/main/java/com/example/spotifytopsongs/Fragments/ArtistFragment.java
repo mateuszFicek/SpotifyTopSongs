@@ -19,6 +19,9 @@ import com.example.spotifytopsongs.Models.Artist;
 import com.example.spotifytopsongs.R;
 import java.util.ArrayList;
 
+/**
+ * Fragment used to display top artists in single ListView.
+ */
 public class ArtistFragment extends Fragment {
     private ArrayList<Artist> topArtists;
     private ListView topArtistListView;

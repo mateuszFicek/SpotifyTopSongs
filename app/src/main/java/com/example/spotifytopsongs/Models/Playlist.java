@@ -1,5 +1,8 @@
 package com.example.spotifytopsongs.Models;
 
+/**
+ * Model class that is used to create and store data about single Playlist.
+ */
 public class Playlist {
     private String description;
     private String id;

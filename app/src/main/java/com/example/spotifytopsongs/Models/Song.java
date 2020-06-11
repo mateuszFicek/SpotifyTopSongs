@@ -2,7 +2,7 @@ package com.example.spotifytopsongs.Models;
 
 
 /**
- * Class for managing song data.
+ * Model class that is used to create and store data about single Song.
  */
 public class Song {
 

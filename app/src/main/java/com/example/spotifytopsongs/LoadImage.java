@@ -12,6 +12,11 @@ import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+
+/**
+ * Class that is used to display Images downloaded from Internet asynchronously.
+ * It adds image to View after it was downloaded from Web.
+ */
 public class LoadImage extends AsyncTask<String, Void, Bitmap> {
 
     WeakReference vRef;

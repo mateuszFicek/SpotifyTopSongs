@@ -7,6 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+/**
+ * Class that connects application with SQLite database.
+ * Here are saved top songs to database.
+ */
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
     private static final String TABLE_NAME_YESTERDAY = "top_songs_yesterday";
@@ -33,6 +37,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    /**
+     * Function to clear data from today's database.
+     */
     public void clearToday(){
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_NAME_TODAY);
@@ -73,6 +80,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return true;
     }
 
+    /**
+     * Function to move data from one database to another.
+     */
     public void moveFromTodayToYesterday(){
         SQLiteDatabase db = this.getReadableDatabase();
         db.delete(TABLE_NAME_YESTERDAY,null,null);

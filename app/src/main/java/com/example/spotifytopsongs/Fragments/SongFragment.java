@@ -70,7 +70,6 @@ public class SongFragment extends Fragment {
 
     private void updateTopSongs() {
         if (topSongs.size() > 0) {
-            Log.d("TOPSIZE", topSongs.size() + "top");
             ListViewAdapter listViewAdapter = new ListViewAdapter(getContext(), topSongs, yesterdayData);
             topSongsListView.setAdapter(listViewAdapter);
         } else {

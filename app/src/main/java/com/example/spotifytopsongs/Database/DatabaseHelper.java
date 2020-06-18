@@ -58,7 +58,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL1, pos);
         contentValues.put(COL2, item);
 
-        Log.d(TAG, "addData: Adding... " + item + " to " + TABLE_NAME_TODAY);
         long result = db.insert(TABLE_NAME_TODAY, null, contentValues);
         if(result == -1){
             return false;
@@ -72,7 +71,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL1, pos);
         contentValues.put(COL2, item);
 
-        Log.d(TAG, "addData: Adding... " + item + " to " + TABLE_NAME_YESTERDAY);
         long result = db.insert(TABLE_NAME_YESTERDAY, null, contentValues);
         if(result == -1){
             return false;

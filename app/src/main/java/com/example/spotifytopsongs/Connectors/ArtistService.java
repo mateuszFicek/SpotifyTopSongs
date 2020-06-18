@@ -54,10 +54,6 @@ public class ArtistService {
                             String id = object.getString("id");
                             String spotifyURL = object.getJSONObject("external_urls").getString("spotify");
                             Artist artist = new Artist(spotifyURL, id, imageURL, name);
-                            Log.d("ARTIST", artist.getName());
-                            Log.d("IMAGE", artist.getImageURL());
-                            Log.d("ID", artist.getId());
-                            Log.d("spot", artist.getSpotifyURL());
                             topArtists.add(artist);
                         } catch (JSONException e) {
                             e.printStackTrace();

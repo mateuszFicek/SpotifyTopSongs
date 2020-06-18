@@ -73,7 +73,6 @@ public class SongFragment extends Fragment {
             ListViewAdapter listViewAdapter = new ListViewAdapter(getContext(), topSongs, yesterdayData);
             topSongsListView.setAdapter(listViewAdapter);
         } else {
-            Log.d("LE", "0");
             Toast zeroLen = Toast.makeText(getActivity(), "Brak piosenek do wyświetlenia", Toast.LENGTH_LONG);
             zeroLen.show();
         }
@@ -86,7 +85,6 @@ public class SongFragment extends Fragment {
                     topSongs = songService.getTopSongs();
                     yesterdayData = mDatabaseHelper.getYesterdayData();
                     boolean shouldUpdateHistory = sharedPreferences.getBoolean("SHOULD_SAVE_DATA", true);
-                    Log.d("SHOULD UPDATE", shouldUpdateHistory + "");
                     if (shouldUpdateHistory && topSongs.size() > 0) {
                         mDatabaseHelper.clearYesterday();
                         mDatabaseHelper.moveFromTodayToYesterday();
@@ -108,11 +106,6 @@ public class SongFragment extends Fragment {
     }
 
     public void AddDataToDB(int pos, String newEntry) {
-        boolean insertData = mDatabaseHelper.addDataToday(pos, newEntry);
-        if (insertData) {
-            Log.d(newEntry, "UDALO SIE");
-        } else {
-            Log.d(newEntry, "Sth WENT WRONG");
-        }
+        mDatabaseHelper.addDataToday(pos, newEntry);
     }
 }

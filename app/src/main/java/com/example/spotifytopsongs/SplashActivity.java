@@ -48,7 +48,6 @@ public class SplashActivity extends AppCompatActivity {
         String value = prefs.getString("DATE", "none");
         boolean shouldUpdate = prefs.getBoolean("SHOULD_SAVE_DATA", true);
         if (value.equals("none") || (!shouldUpdate && !value.equals(currentDate))) {
-            Log.d("SHOULDIN", value);
             editor = prefs.edit();
             editor.putString("DATE", currentDate);
             editor.putBoolean("SHOULD_SAVE_DATA", true);
@@ -64,7 +63,6 @@ public class SplashActivity extends AppCompatActivity {
             User user = userService.getUser();
             editor = getSharedPreferences("SPOTIFY", 0).edit();
             editor.putString("userid", user.id);
-            Log.d("USERID", user.id);
             editor.commit();
             startMainActivity();
         });

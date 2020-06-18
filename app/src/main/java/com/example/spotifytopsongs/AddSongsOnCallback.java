@@ -42,14 +42,11 @@ public class AddSongsOnCallback implements PlaylistCallback {
         endpoint += playlist.getId();
         endpoint += "/tracks";
         JSONArray tracksArray = new JSONArray();
-        Log.d("end", endpoint);
         String name = "";
-        Log.d("SIZE", Integer.toString(topsongs.size()));
         for (int i = 0; i < topsongs.size(); i++) {
             name += "spotify:track:";
             name += topsongs.get(i).getId();
             tracksArray.put(name);
-            Log.d("NAZWA", name);
             name = "";
 
         }

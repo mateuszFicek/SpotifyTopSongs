@@ -62,7 +62,6 @@ public class PlaylistService {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.POST, endpoint, dataObject, response -> {
                     try {
-                        Log.d("Respo", response.toString());
                         String description = response.getString("description");
                         String id = response.getString("id");
                         String name = response.getString("name");

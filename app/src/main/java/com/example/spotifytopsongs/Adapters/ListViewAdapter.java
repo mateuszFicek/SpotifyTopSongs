@@ -80,9 +80,7 @@ public class ListViewAdapter extends ArrayAdapter<Song> {
         for (int i = 0; i < topSongsList.size(); i++) {
             while (yesterdayData.moveToNext()) {
                 if (yesterdayData.getString(1).trim().equals(topSongsList.get(i).getId().trim())) {
-                    Log.d("MATCH", yesterdayData.getString(0));
                     pos[counter] = (yesterdayData.getString(0));
-                    Log.d("POS", pos[counter]);
                 }
             }
             if (pos[counter] == null) {

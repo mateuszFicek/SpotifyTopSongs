@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 /**
  * Class that connects application with SQLite database.
@@ -59,10 +58,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL2, item);
 
         long result = db.insert(TABLE_NAME_TODAY, null, contentValues);
-        if(result == -1){
-            return false;
-        } else
-            return true;
+        return result != -1;
     }
 
     public boolean addDataYesterday(int pos, String item){
@@ -72,10 +68,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL2, item);
 
         long result = db.insert(TABLE_NAME_YESTERDAY, null, contentValues);
-        if(result == -1){
-            return false;
-        } else
-            return true;
+        return result != -1;
     }
 
     /**

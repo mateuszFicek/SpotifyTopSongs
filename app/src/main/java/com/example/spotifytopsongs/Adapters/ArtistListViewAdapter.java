@@ -31,8 +31,8 @@ public class ArtistListViewAdapter extends ArrayAdapter<Artist> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_artist, parent, false);
         }
-        TextView artistName = (TextView) convertView.findViewById(R.id.artistName);
-        ImageView cover = (ImageView) convertView.findViewById(R.id.artistImage);
+        TextView artistName = convertView.findViewById(R.id.artistName);
+        ImageView cover = convertView.findViewById(R.id.artistImage);
         artistName.setText(artist.getName());
         Picasso.get().load(artist.getImageURL()).into(cover);
         return convertView;

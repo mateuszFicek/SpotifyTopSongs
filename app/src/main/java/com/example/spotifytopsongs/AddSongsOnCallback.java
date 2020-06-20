@@ -1,10 +1,8 @@
 package com.example.spotifytopsongs;
 
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -52,7 +50,7 @@ public class AddSongsOnCallback implements PlaylistCallback {
         }
         JSONObject dataObject = new JSONObject();
         try {
-            dataObject.put("uris", (Object) tracksArray);
+            dataObject.put("uris", tracksArray);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -64,7 +62,7 @@ public class AddSongsOnCallback implements PlaylistCallback {
 
                 }) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", "");
                 String auth = "Bearer " + token;

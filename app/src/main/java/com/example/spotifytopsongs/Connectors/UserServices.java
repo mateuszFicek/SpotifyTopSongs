@@ -1,8 +1,6 @@
 package com.example.spotifytopsongs.Connectors;
 
 import android.content.SharedPreferences;
-import android.util.Log;
-import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.spotifytopsongs.Models.User;
@@ -46,7 +44,7 @@ public class UserServices {
 
         })) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = msharedPreferences.getString("token", "");
                 String auth = "Bearer " + token;

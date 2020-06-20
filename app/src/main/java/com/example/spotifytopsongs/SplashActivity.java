@@ -3,11 +3,8 @@ package com.example.spotifytopsongs;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Window;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.example.spotifytopsongs.Models.User;
@@ -15,7 +12,6 @@ import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 import com.example.spotifytopsongs.Connectors.UserServices;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;

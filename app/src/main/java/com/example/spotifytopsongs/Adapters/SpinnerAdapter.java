@@ -1,20 +1,14 @@
 package com.example.spotifytopsongs.Adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
 import com.example.spotifytopsongs.Models.Playlist;
 import com.example.spotifytopsongs.R;
-
 import java.util.ArrayList;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 /**
  * Spinner adapter used to display all playlists user has.

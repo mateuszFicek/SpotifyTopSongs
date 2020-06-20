@@ -3,7 +3,6 @@ package com.example.spotifytopsongs.Adapters;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,12 +39,12 @@ public class ListViewAdapter extends ArrayAdapter<Song> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.row, parent, false);
         }
 
-        TextView artist = (TextView) convertView.findViewById(R.id.artistTextView);
-        TextView title = (TextView) convertView.findViewById(R.id.titleTextView);
-        ImageView cover = (ImageView) convertView.findViewById(R.id.coverImage);
-        TextView positionView = (TextView) convertView.findViewById(R.id.positionYesterday);
-        TextView positionToday = (TextView) convertView.findViewById(R.id.positionToday);
-        TextView differenceView = (TextView) convertView.findViewById(R.id.difference);
+        TextView artist = convertView.findViewById(R.id.artistTextView);
+        TextView title = convertView.findViewById(R.id.titleTextView);
+        ImageView cover = convertView.findViewById(R.id.coverImage);
+        TextView positionView = convertView.findViewById(R.id.positionYesterday);
+        TextView positionToday = convertView.findViewById(R.id.positionToday);
+        TextView differenceView = convertView.findViewById(R.id.difference);
 
         artist.setText(song.getArtist());
         title.setText(song.getName());

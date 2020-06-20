@@ -1,9 +1,7 @@
 package com.example.spotifytopsongs.Connectors;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.widget.Toast;
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -75,7 +73,7 @@ public class PlaylistService {
 
                 }) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", "");
                 String auth = "Bearer " + token;
@@ -112,7 +110,7 @@ public class PlaylistService {
 
                 }) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", "");
                 String auth = "Bearer " + token;
@@ -136,7 +134,7 @@ public class PlaylistService {
         tracksArray.put(name);
         JSONObject dataObject = new JSONObject();
         try {
-            dataObject.put("uris", (Object) tracksArray);
+            dataObject.put("uris", tracksArray);
         } catch (
                 JSONException e) {
             e.printStackTrace();
@@ -149,7 +147,7 @@ public class PlaylistService {
 
                 }) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", "");
                 String auth = "Bearer " + token;
@@ -193,7 +191,7 @@ public class PlaylistService {
 
                 }) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 String token = sharedPreferences.getString("token", "");
                 String auth = "Bearer " + token;
